@@ -19,9 +19,10 @@
   when: apache_vhosts != false
 
 - name: Copy key
-  command: rsync -i --checksum "{{apache_ssl_key_store}}/{{item.1.key_file}}" "{{apache_ssl_path}}/{{item.1.key_file}}"
-  register: result
-  changed_when: result.stdout
+  copy:
+    src: "{{apache_ssl_key_store}}/{{item.1.key_file}}"
+    dest: "{{apache_ssl_path}}/{{item.1.key_file}}"
+    mode: 0600
   notify: Restart apache
   with_subelements:
    - apache_vhosts
